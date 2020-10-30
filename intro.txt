@@ -1,0 +1,1 @@
+#For generic comments or virtualenv settings
