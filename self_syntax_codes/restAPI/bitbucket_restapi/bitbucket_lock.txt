@@ -1,0 +1,8 @@
+import getpass,json,requests,sys
+
+user=raw_input("Please enter username: ")
+passwd=getpass.getpass()
+auth_values = (user, passwd)
+
+
+url="http://tlvgit02.nice.com/rest/branch-permissions/2.0/projects/WFO/repos/saas-platform-ms-tenant-manager/restrictions"

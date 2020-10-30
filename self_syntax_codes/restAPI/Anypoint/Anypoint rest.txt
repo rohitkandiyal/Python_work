@@ -1,0 +1,28 @@
+
+import requests
+import json
+
+
+url="https://anypoint.mulesoft.com/accounts/login"
+
+payload={"username":"rohit_kandiyal","password":"June@2018"}
+headers = {'content-type': 'application/json'}
+
+r = requests.post(url, data=json.dumps(payload), headers=headers)
+
+
+token=str(json.loads(r.text)["access_token"])
+token=str(json.loads(r.text)["token_type"])+" "+token
+
+
+
+url="https://anypoint.mulesoft.com/accounts/api/me"
+headers={"Authorization":token}
+
+r1 = requests.get(url, headers=headers)
+
+org_ID=str(json.loads(r1.text)["user"] ["organization"] ["id"])
+
+
+url = "https://anypoint.mulesoft.com/accounts/api/organizations/"+org_ID+"/environments"
+

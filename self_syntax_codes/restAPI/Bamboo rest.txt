@@ -1,0 +1,39 @@
+import requests,json
+
+url="http://10.209.240.22:8085/rest/api/latest/project.json"	//gives project details in json
+
+user="rohit.kandiyal"
+passwd="June@2018"
+auth_values = (user, passwd)
+
+prj= requests.get(url, auth=auth_values)
+
+prj=json.loads(prj.text)			//converted to dict
+
+#print a["projects"]["project"][1]		//print 1st project details
+
+print "CURRENT PROJECTS\n"
+
+for i in range(len(prj["projects"]["project"])):
+	print prj["projects"]["project"][i]["name"]
+
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+import requests		
+
+class bamboo_rest_call:
+	user="rohit.kandiyal"
+	passwd="June@2018"
+	auth_values = (user, passwd)
+
+	def __init__(self,url):
+		self.url=url
+	
+	def get_method(self):
+		return requests.get(self.url, auth=auth_values)
+	
+	
+

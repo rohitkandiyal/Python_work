@@ -1,0 +1,25 @@
+import requests,json
+
+url="https://tlvgit02.nice.com/rest/api/1.0/projects"	//gives project details in json
+
+user="Rohit.Kandiyal"
+passwd="P@s&nc17f"
+auth_values = (user, passwd)
+
+prj= requests.get(url, auth=auth_values)
+
+prj=json.loads(prj.text)			//converted to dict
+
+#print a["projects"]["project"][1]		//print 1st project details
+
+print "CURRENT PROJECTS\n"
+
+for i in range(len(prj["projects"]["project"])):
+	print prj["projects"]["project"][i]["name"]
+	
+	
+	
+
+
+
+
