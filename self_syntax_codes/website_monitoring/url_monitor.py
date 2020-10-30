@@ -9,6 +9,10 @@ def fetch_response_status(url):
     response = connection.getresponse()
     return response.status,response.reason
 
+
+logging.basicConfig(filename='abc.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', 
+            datefmt='%Y-%m-%d %H:%M:%S')
+
+
 for url in url_list:
-    print(url)
-    print(type(url))
+    
