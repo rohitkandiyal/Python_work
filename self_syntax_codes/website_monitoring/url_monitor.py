@@ -15,7 +15,7 @@ def check_http_url(url_to_validate):
         response = requests.get(url_to_validate)
         return response.status_code
     except requests.ConnectionError as exception:
-        logging.error("URL: {} does not exist on Internet".format(url_to_validate))
+        logging.error("URL: {} connection failed".format(url_to_validate))
 
 #Setting URLs to http for requests module:Better error handling and redirects
 def set_http_url(url):
@@ -32,6 +32,7 @@ def website_check(url):
     return check_http_url(url)
 
 def internet_available():
+    logging.info("Checking internet connection..")
     try:
         r=website_check("http://google.com")
         r1=website_check("http://facebook.com")
@@ -78,5 +79,6 @@ if internet_available():
                 send_email(receiver,subject_content)
 else:
     logging.error("Internet Unavailable")
+    sys.exit(1)
 
     
