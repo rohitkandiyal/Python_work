@@ -30,12 +30,7 @@ def set_http_url(url):
 #Separate function to abstract the http client module
 def website_check(url):
     url=set_http_url(url)
-    resp = check_http_url(url)
-    if (resp == 200):
-        return "Success"
-    else:
-        return "Failure"
-        logging.error("URL unreachable:", url)
+    return check_http_url(url)
 
 def internet_available():
     try:
@@ -44,7 +39,7 @@ def internet_available():
     except:
         logging.error("Website response failed..") 
     
-    if (r == "Success") or (r1 == "Success"):
+    if (r == 200) or (r1 == 200):
         logging.info("Internet Connection Established")
         return True
     else:
@@ -72,14 +67,15 @@ logging.info("++++++++++++++++++++++Starting URL {} health check++++++++++++++++
 if internet_available():
     for url in url_list:
         logging.info("Checking URL {} ".format(url))
-        if (website_check(url) == "Success"):
+        resp = website_check(url)
+        if (resp == 200):
             logging.info("{0} is ACTIVE.".format(url))
         else:
-            logging.error("{0} is INACTIVE.".format(url))
-            '''subject_content="{} : URL IS UNRESPONSIVE".format(url)
+            logging.error("{0} is INACTIVE. STATUS CODE: {1}".format(url,resp))
+            subject_content="{} : URL check has failed with status code: {}".format(url,resp)
             receiver_list=["kandiyalrohit@gmail.com"]
             for receiver in receiver_list:
-                send_email(receiver,body)'''
+                send_email(receiver,subject_content)
 else:
     logging.error("Internet Unavailable")
 
