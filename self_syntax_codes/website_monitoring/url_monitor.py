@@ -13,7 +13,6 @@ logging.basicConfig(filename='site_access.log', level=logging.INFO, format='%(as
 def check_http_url(url_to_validate):
     try:
         response = requests.get(url_to_validate)
-        logging.info("URL: {} is valid and exists on the internet".format(url_to_validate))
         return response.status_code
     except requests.ConnectionError as exception:
         logging.error("URL: {} does not exist on Internet".format(url_to_validate))
@@ -57,6 +56,7 @@ def send_email(receiver,subject):
             server.starttls()
             server.login("kandiyalrohitabcd", password)
             server.sendmail(e_sender, e_receiver, email_content)
+            logging.info('Error email sent to {}'.format(e_receiver))
         except SMTPException:
             logging.error('SMTPException error')
         except:
