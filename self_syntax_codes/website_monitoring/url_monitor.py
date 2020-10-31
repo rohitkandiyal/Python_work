@@ -18,7 +18,7 @@ def check_http_url(url_to_validate):
     except requests.ConnectionError as exception:
         logging.error("URL: {} does not exist on Internet".format(url_to_validate))
 
-#Setting URLs to http for requests module
+#Setting URLs to http for requests module:Better error handling and redirects
 def set_http_url(url):
     if (url.startswith("http://") or url.startswith("https://")):
         return url
