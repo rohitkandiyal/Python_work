@@ -1,8 +1,7 @@
 #!/usr/bin/python
 
-from http.client import HTTPConnection, HTTPException, socket
-from smtplib import SMTP
 import requests
+from smtplib import SMTP
 import logging, sys
 
 #https://na1.dev.nice-incontact.com/    https://na12.dev.nice-incontact.com/
@@ -10,20 +9,7 @@ url_list=["python.org","http://python.org","www.python.org","https://na1.dev.nic
 logging.basicConfig(filename='site_access.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', 
             datefmt='%Y-%m-%d %H:%M:%S')
 
-def fetch_response_status(url):
-    try:
-        connection = HTTPConnection(url)
-        connection.request("GET", "/")
-        response = connection.getresponse()
-        return response.status
-    except HTTPException:
-        logging.error('HTTPException error')
-    except socket.error:
-        logging.error('Socket error')
-    except:
-        logging.error('Invalid URL:', url)
-        logging.error('HTTP connection Error')
-
+#
 def check_http_url(url_to_validate):
     try:
         response = requests.get(url_to_validate)
@@ -32,6 +18,7 @@ def check_http_url(url_to_validate):
     except requests.ConnectionError as exception:
         logging.error("URL: {} does not exist on Internet".format(url_to_validate))
 
+#Setting URLs to http for requests module
 def set_http_url(url):
     if (url.startswith("http://") or url.startswith("https://")):
         return url
@@ -40,15 +27,10 @@ def set_http_url(url):
     else:
         return "{}{}".format("http://",url)
 
+#Separate function to abstract the http client module
 def website_check(url):
     url=set_http_url(url)
     resp = check_http_url(url)
-    '''
-    if (url.startswith("http")):
-        resp = check_http_url(url)
-    else:
-        resp = fetch_response_status(url)
-    '''
     if (resp == 200):
         return "Success"
     else:
@@ -89,7 +71,6 @@ def send_email(receiver,subject):
 logging.info("++++++++++++++++++++++Starting URL {} health check++++++++++++++++++++++".format(url_list))
 if internet_available():
     for url in url_list:
-        url = set_http_url(url)
         logging.info("Checking URL {} ".format(url))
         if (website_check(url) == "Success"):
             logging.info("{0} is ACTIVE.".format(url))
