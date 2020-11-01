@@ -5,8 +5,8 @@ from email.message import EmailMessage
 from smtplib import SMTP
 import logging, sys
 
-#https://na1.dev.nice-incontact.com/    https://na12.dev.nice-incontact.com/
-url_list=["python.org","http://python.org","www.python.org","https://na1.dev.nice-incontact.com/","http://www.google.com/blahblah","www.na12.dev.nice-incontact.com/"]
+#url_list=["python.org","http://python.org","www.python.org","https://na1.dev.nice-incontact.com/","http://www.google.com/wework","www.na12.dev.nice-incontact.com/"]
+url_list=sys.argv[1].split(",")
 logging.basicConfig(filename='site_access.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', 
             datefmt='%Y-%m-%d %H:%M:%S')
 body="testing"
@@ -37,6 +37,12 @@ def set_http_url(url):
     else:
         return "{}{}".format("http://",url)
 
+def validate_url(url):
+    if(" " in url):
+        return False
+    else:
+        pass
+                   
 #Separate function to abstract the http client module
 def website_check(url):
     url=set_http_url(url)
