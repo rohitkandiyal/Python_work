@@ -11,7 +11,7 @@ receiver_list=sys.argv[2].split(",")
 LOG_FILE='site_access.log'
 logging.basicConfig(filename=LOG_FILE, level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', 
             datefmt='%Y-%m-%d %H:%M:%S')
-body="testing"
+body="Server sent no HTTP error response"
 
 #
 def check_http_url(url_to_validate):
