@@ -52,6 +52,9 @@ print reduce(lambda a,c: a if (a > c) else c , b)
 
 print "\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
+#Done for url validation
+lambda a: "http" if (a == "www") else a
+
 
 
 
