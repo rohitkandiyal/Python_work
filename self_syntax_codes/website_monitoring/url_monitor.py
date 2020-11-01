@@ -1,21 +1,32 @@
 #!/usr/bin/python
 
 import requests
+from email.message import EmailMessage
 from smtplib import SMTP
 import logging, sys
 
 #https://na1.dev.nice-incontact.com/    https://na12.dev.nice-incontact.com/
-url_list=["python.org","http://python.org","www.python.org","https://na1.dev.nice-incontact.com/","na1.dev.nice-incontact.com/","www.na12.dev.nice-incontact.com/"]
+url_list=["python.org","http://python.org","www.python.org","https://na1.dev.nice-incontact.com/","http://www.google.com/blahblah","www.na12.dev.nice-incontact.com/"]
 logging.basicConfig(filename='site_access.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', 
             datefmt='%Y-%m-%d %H:%M:%S')
+body="testing"
 
 #
 def check_http_url(url_to_validate):
+    global body
     try:
         response = requests.get(url_to_validate)
         return response.status_code
-    except requests.ConnectionError as exception:
+        response.raise_for_status()
+    except requests.HTTPError as httperr:
+        logging.error("URL: {} throws Http Error: {}".format(url_to_validate,httperr))
+        body = str(httperr)
+    except requests.ConnectionError as connerr:
+        logging.error("URL: {} throws connection error: {}".format(url_to_validate,connerr))
+        body = str(connerr)
+    except requests.RequestException as err:
         logging.error("URL: {} connection failed".format(url_to_validate))
+        body = str(err)
 
 #Setting URLs to http for requests module:Better error handling and redirects
 def set_http_url(url):
@@ -45,18 +56,21 @@ def internet_available():
     else:
         return False
 
-def send_email(receiver,subject):
+def send_email(e_receiver,subject):
     port = 587
     smtp_server = "smtp.gmail.com"
-    e_sender = "kandiyalrohitabcd@gmail.com"
-    e_receiver = receiver
+    global body
+    msg = EmailMessage()
+    msg.set_content(body)
+    msg['Subject'] = subject
+    msg['From'] = "kandiyalrohitabcd@gmail.com"
+    msg['To'] = e_receiver
     password = "Symantec@123"
-    email_content = "Subject: {}".format(subject)
     with SMTP(smtp_server, port) as server:
         try:
             server.starttls()
             server.login("kandiyalrohitabcd", password)
-            server.sendmail(e_sender, e_receiver, email_content)
+            server.send_message(msg)
             logging.info('Error email sent to {}'.format(e_receiver))
         except SMTPException:
             logging.error('SMTPException error')
