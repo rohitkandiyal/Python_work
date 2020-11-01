@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import requests
+import requests,re
 from email.message import EmailMessage
 from smtplib import SMTP
 import logging, sys
@@ -39,11 +39,20 @@ def set_http_url(url):
     else:
         return "{}{}".format("http://",url)
 
+#additional check to validate the URL formation
 def validate_url(url):
     if(" " in url):
         return False
     else:
         pass
+#check the validate the email id
+def validate_email(email_id):
+    regex_obj=re.compile(r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$')
+    if(re.search(regex_obj,email_id)):
+        return True
+    else:
+        return False
+
                    
 #Separate function to abstract the http client module
 def website_check(url):
@@ -74,16 +83,19 @@ def send_email(e_receiver,subject):
     msg['From'] = "kandiyalrohitabcd@gmail.com"
     msg['To'] = e_receiver
     password = "Symantec@123"
-    with SMTP(smtp_server, port) as server:
-        try:
-            server.starttls()
-            server.login("kandiyalrohitabcd", password)
-            server.send_message(msg)
-            logging.info('Error email sent to {}'.format(e_receiver))
-        except SMTPException:
-            logging.error('SMTPException error')
-        except:
-            logging.error('SMTP connection Error')
+    if (validate_email(e_receiver)):
+        with SMTP(smtp_server, port) as server:
+            try:
+                server.starttls()
+                server.login("kandiyalrohitabcd", password)
+                server.send_message(msg)
+                logging.info('Error email sent to {}'.format(e_receiver))
+            except SMTPException:
+                logging.error('SMTPException error')
+            except:
+                logging.error('SMTP connection Error')
+    else:
+        logging.error("Email ID {} is Invalid".format(e_receiver))
 
 
 logging.info("++++++++++++++++++++++Starting URL {} health check++++++++++++++++++++++".format(url_list))
