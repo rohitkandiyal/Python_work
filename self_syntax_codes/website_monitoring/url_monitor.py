@@ -7,7 +7,9 @@ import logging, sys
 
 #url_list=["python.org","http://python.org","www.python.org","https://na1.dev.nice-incontact.com/","http://www.google.com/wework","www.na12.dev.nice-incontact.com/"]
 url_list=sys.argv[1].split(",")
-logging.basicConfig(filename='site_access.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', 
+receiver_list=sys.argv[2].split(",")
+LOG_FILE='site_access.log'
+logging.basicConfig(filename=LOG_FILE, level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', 
             datefmt='%Y-%m-%d %H:%M:%S')
 body="testing"
 
@@ -94,7 +96,7 @@ if internet_available():
         else:
             logging.error("{0} is INACTIVE. STATUS CODE: {1}".format(url,resp))
             subject_content="{} : URL check has failed with status code: {}".format(url,resp)
-            receiver_list=["kandiyalrohit@gmail.com"]
+            #receiver_list=["kandiyalrohit@gmail.com"]
             for receiver in receiver_list:
                 send_email(receiver,subject_content)
 else:
