@@ -44,7 +44,8 @@ def validate_url(url):
     if(" " in url):
         return False
     else:
-        #TBD: regex for url validation
+        #TBD: regex for url validation.
+        #as of now handled by requests module exceptions
         return True
 #check the validate the email id
 def validate_email(email_id):
