@@ -44,7 +44,8 @@ def validate_url(url):
     if(" " in url):
         return False
     else:
-        pass
+        #TBD: regex for url validation
+        return True
 #check the validate the email id
 def validate_email(email_id):
     regex_obj=re.compile(r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$')
@@ -59,6 +60,7 @@ def website_check(url):
     url=set_http_url(url)
     return check_http_url(url)
 
+#Check to validate the access to internet
 def internet_available():
     logging.info("Checking internet connection..")
     try:
@@ -82,7 +84,7 @@ def send_email(e_receiver,subject):
     msg['Subject'] = subject
     msg['From'] = "kandiyalrohitabcd@gmail.com"
     msg['To'] = e_receiver
-    password = "Symantec@123"
+    password = "Rohit@123"
     if (validate_email(e_receiver)):
         with SMTP(smtp_server, port) as server:
             try:
@@ -102,15 +104,18 @@ logging.info("++++++++++++++++++++++Starting URL {} health check++++++++++++++++
 if internet_available():
     for url in url_list:
         logging.info("Checking URL {} ".format(url))
-        resp = website_check(url)
-        if (resp == 200):
-            logging.info("{0} is ACTIVE.".format(url))
+        if (validate_url(url)):
+            resp = website_check(url)
+            if (resp == 200):
+                logging.info("{0} is ACTIVE.".format(url))
+            else:
+                logging.error("{0} is INACTIVE. STATUS CODE: {1}".format(url,resp))
+                subject_content="{} : URL check has failed with status code: {}".format(url,resp)
+                #receiver_list=["kandiyalrohit@gmail.com"]
+                for receiver in receiver_list:
+                    send_email(receiver,subject_content)
         else:
-            logging.error("{0} is INACTIVE. STATUS CODE: {1}".format(url,resp))
-            subject_content="{} : URL check has failed with status code: {}".format(url,resp)
-            #receiver_list=["kandiyalrohit@gmail.com"]
-            for receiver in receiver_list:
-                send_email(receiver,subject_content)
+            logging.error("Invalid URL")
 else:
     logging.error("Internet Unavailable")
     sys.exit(1)
