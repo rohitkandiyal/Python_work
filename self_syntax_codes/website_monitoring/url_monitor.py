@@ -2,7 +2,7 @@
 
 import requests,re
 from email.message import EmailMessage
-from smtplib import SMTP
+from smtplib import SMTP, SMTPException
 import logging, sys
 
 #url_list=["python.org","http://python.org","www.python.org","https://na1.dev.nice-incontact.com/","http://www.google.com/wework","www.na12.dev.nice-incontact.com/"]
@@ -94,9 +94,9 @@ def send_email(e_receiver,subject):
                 server.send_message(msg)
                 logging.info('Error email sent to {}'.format(e_receiver))
             except SMTPException:
-                logging.error('SMTPException error')
+                logging.error('SMTPException error: Email not sent.')
             except:
-                logging.error('SMTP connection Error')
+                logging.error('SMTP connection Error: Email not sent.')
     else:
         logging.error("Email ID {} is Invalid".format(e_receiver))
 
