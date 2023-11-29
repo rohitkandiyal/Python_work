@@ -3,7 +3,7 @@ a = "roHIt"
 print(a.swapcase())
 print(a.capitalize())
 print(a.casefold())
-# print(a.count())
+
 print("############################################")
 
 a = 1.2233
@@ -34,7 +34,7 @@ a = "AADAkjakAADADADAJHKL"
 
 print(a.count("AD"))
 
-#but issue with ADA as response shud be 3
+#but issue with ADA as response shud be 4
 print(a.count("ADA"))
 
 count = 0
@@ -48,6 +48,8 @@ print(count)
 print("############################################")
 a = "P"
 print(chr(ord(a) + 1))
+
+
 
 
 
